@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="card m-5">
+        <h5 class="card-header">
+            Моя корзина
+        </h5>
+        <div class="card-body">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th>id товара</th>
+                        <th>Товар</th>
+                        <th>Цена </th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for bucket in bucket_list %}
+                    <tr>
+                    <td>
+                        {{bucket.product.id}}
+                    </td>
+                     <td>
+                         {{bucket.product.name}}
+                     </td>
+                    <td>
+                        {{bucket.product.price}} (руб)
+                    </td>
+                    <td>
+                        <a href="#" class="btn btn-danger">
+                            Убрать из корзины
+                        </a>
+                    </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        <table class="table table-success">
+                <thead>
+                    <tr>
+
+                        <th>Товар</th>
+                        <th>Количество</th>
+                        <th>Цена </th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for bucket in total_buckets %}
+                    <tr>
+                     <td>
+                         {{bucket.product__name}}
+                     </td>
+                     <td>
+                         {{bucket.count_product}}
+                     </td>
+                    <td>
+                        {{bucket.sum_product}} (руб)
+                    </td>
+                    <td>
+                        <a href="#" class="btn btn-danger">
+                            Убрать из корзины
+                        </a>
+                    </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer right">
+            <a href="#" class="btn btn-primary">Отмена</a>
+            <a href="" class="btn btn-success">Заказать</a>
+        </div>
+    </div>
+{% endblock %}

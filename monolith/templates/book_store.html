@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+   <div class="container-fluid mt-5">
+    <h5>Тестовая страница по магазину книг</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Издательство</th>
+                <th>Количество книг</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for publisher in publisher_results %}
+               <tr>
+                    <td>
+                        {{publisher.name}}
+                    </td>
+                    <td>
+                        {{publisher.count_books}}
+                    </td>
+                </tr>
+           {% endfor %}
+        </tbody>
+    </table>
+   </div>
+{% endblock %}
