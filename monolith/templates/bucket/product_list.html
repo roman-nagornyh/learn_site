@@ -5,67 +5,53 @@
             Моя корзина
         </h5>
         <div class="card-body">
-            <table class="table table-dark">
-                <thead>
-                    <tr>
-                        <th>id товара</th>
-                        <th>Товар</th>
-                        <th>Цена </th>
-                        <th>Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for bucket in bucket_list %}
-                    <tr>
-                    <td>
-                        {{bucket.product.id}}
-                    </td>
-                     <td>
-                         {{bucket.product.name}}
-                     </td>
-                    <td>
-                        {{bucket.product.price}} (руб)
-                    </td>
-                    <td>
-                        <a href="#" class="btn btn-danger">
-                            Убрать из корзины
-                        </a>
-                    </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        <table class="table table-success">
-                <thead>
-                    <tr>
+            <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Товар</th>
+                            <th>Количество</th>
+                            <th>Цена </th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for bucket in bucket_list %}
+                        <tr>
+                            <td>
+                                {{bucket.product__name}}
+                            </td>
+                            <td>
+                                {{bucket.count_product}}
+                            </td>
+                            <td>
+                                {{bucket.sum_product}} (руб)
+                            </td>
+                            <td>
 
-                        <th>Товар</th>
-                        <th>Количество</th>
-                        <th>Цена </th>
-                        <th>Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for bucket in total_buckets %}
-                    <tr>
-                     <td>
-                         {{bucket.product__name}}
-                     </td>
-                     <td>
-                         {{bucket.count_product}}
-                     </td>
-                    <td>
-                        {{bucket.sum_product}} (руб)
-                    </td>
-                    <td>
-                        <a href="#" class="btn btn-danger">
-                            Убрать из корзины
-                        </a>
-                    </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                                <form action="{% url 'monolith:delete_product_all' bucket.product__id%}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" href="#" class="btn btn-danger">
+                                        Убрать из корзины
+                                    </button>
+                                </form>
+                                 <form class="mt-2" action="{% url 'monolith:delete_product_first' bucket.product__id %}"
+                                 method="post">
+                                     {% csrf_token %}
+                                     <button type="submit" class="btn btn-warning">
+                                         Уменьшить кол-во
+                                     </button>
+                                 </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                        <tr>
+                            <th colspan="2">Итоговая цена</th>
+                            <th colspan="2">
+                                {{total_price.sum_product__sum}} (руб)
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
         <div class="card-footer right">
             <a href="#" class="btn btn-primary">Отмена</a>

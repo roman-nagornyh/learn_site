@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import monolith.middelware
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -55,6 +57,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "monolith.middelware.FirstMiddelware",
+    # "monolith.middelware.SecondMiddleware",
 
 ]
 

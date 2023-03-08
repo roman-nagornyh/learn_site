@@ -106,50 +106,45 @@ class ProductOrder(models.Model):
         verbose_name_plural = 'Товары и заказы'
 
 
-#===============================Тестовый пример====================================================
+#============================== Тестовый пример  ===============================================
 
 DB_SCHEMA_TEST = 'test'
 
 
-class Author(models.Model):
-    name = models.CharField(max_length=100)
-    age = models.IntegerField()
+class Person(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
 
     class Meta:
-        db_table = f'{DB_SCHEMA_TEST}\".\"authors'
-        verbose_name = 'Автор'
-        verbose_name_plural = 'Авторы'
+        db_table = f'{DB_SCHEMA_TEST}\".\"persons'
 
 
-class Publisher(models.Model):
-    name = models.CharField(max_length=300)
-
+class MyPerson(Person):
     class Meta:
-        db_table = f'{DB_SCHEMA_TEST}\".\"publishers'
-        verbose_name = 'издатель'
-        verbose_name_plural = 'издатели'
+        proxy = True
 
 
-class Book(models.Model):
-    name = models.CharField(max_length=300)
-    pages = models.IntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    rating = models.FloatField()
-    authors = models.ManyToManyField(Author)
-    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
-    pubdate = models.DateField()
 
-    class Meta:
-        db_table = f'{DB_SCHEMA_TEST}\".\"books'
-        verbose_name = 'книга'
-        verbose_name_plural = 'книги'
+# class Topping(models.Model):
+#     name = models.CharField(null=False, max_length=50)
+#
+#     class Meta:
+#         db_table = f'{DB_SCHEMA_TEST}\".\"toppings'
+#         verbose_name = 'Начинка пиццы'
+#         verbose_name_plural = 'Начинки пиццы'
+#
+#
+# class Pizza(models.Model):
+#     name = models.CharField(null=False, max_length=100)
+#     toppings = models.ManyToManyField(Topping)
+#
+#     class Meta:
+#         db_table = f'{DB_SCHEMA_TEST}\".\"pizza'
+#         verbose_name = 'Пицца'
+#         verbose_name_plural = 'Пиццы'
 
 
-class Store(models.Model):
-    name = models.CharField(max_length=300)
-    books = models.ManyToManyField(Book)
 
-    class Meta:
-        db_table = f'{DB_SCHEMA_TEST}\".\"stores'
-        verbose_name = 'магазин'
-        verbose_name_plural = 'магазины'
+
+
+
