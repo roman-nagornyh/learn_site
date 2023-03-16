@@ -1,9 +1,25 @@
 {% extends 'base.html' %}
+{% block script %}
+    <script>
+        function delete_object(url)
+        {
+            // Можно и через cookie попробовать достать, тк токен хранится там
+            let token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            fetch(url, {
+                method:'POST',
+                headers: { "X-CSRFToken": token },
+            }).then(()=>window.location.href='');
+        }
+    </script>
+{% endblock %}
 {% block content %}
     <div class="card m-5">
         <h5 class="card-header">
             Моя корзина
         </h5>
+     {% if bucket_list.count > 0 %}
+          <form action="{% url 'monolith:order_create' %}" method="post">
+      {% csrf_token %}
         <div class="card-body">
             <table class="table">
                     <thead>
@@ -15,47 +31,53 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for bucket in bucket_list %}
-                        <tr>
-                            <td>
-                                {{bucket.product__name}}
-                            </td>
-                            <td>
-                                {{bucket.count_product}}
-                            </td>
-                            <td>
-                                {{bucket.sum_product}} (руб)
-                            </td>
-                            <td>
-
-                                <form action="{% url 'monolith:delete_product_all' bucket.product__id%}" method="post">
-                                    {% csrf_token %}
-                                    <button type="submit" href="#" class="btn btn-danger">
+                        {% for bucket in bucket_list %}
+                            <tr>
+                                <td>
+                                    <input type="hidden" name="product_id" value="{{bucket.product__id}}">
+                                    {{bucket.product__name}}
+                                </td>
+                                <td>
+                                    <input type="hidden" name="count_product" value="{{bucket.count_product}}">
+                                    {{bucket.count_product}}
+                                </td>
+                                <td>
+                                    <input type="hidden" name="price" value="{{bucket.sum_product}}">
+                                    {{bucket.sum_product}} (руб)
+                                </td>
+                                <td>
+                                    <span onclick="delete_object('{% url 'monolith:delete_product_all' bucket.product__id%}')"
+                                    class="btn btn-danger">
                                         Убрать из корзины
-                                    </button>
-                                </form>
-                                 <form class="mt-2" action="{% url 'monolith:delete_product_first' bucket.product__id %}"
-                                 method="post">
-                                     {% csrf_token %}
-                                     <button type="submit" class="btn btn-warning">
-                                         Уменьшить кол-во
-                                     </button>
-                                 </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                        <tr>
-                            <th colspan="2">Итоговая цена</th>
-                            <th colspan="2">
-                                {{total_price.sum_product__sum}} (руб)
-                            </th>
-                        </tr>
+                                    </span>
+                                    <span  class="btn btn-warning"
+                                           onclick="delete_object('{% url 'monolith:delete_product_first' bucket.product__id %}')">
+                                             Уменьшить кол-во
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <th colspan="2">Итоговая цена</th>
+                                <th colspan="2">
+                                    <input type="hidden" name="total_price" value="{{total_price.sum_product__sum}}">
+                                    {{total_price.sum_product__sum}} (руб)
+                                </th>
+                            </tr>
                     </tbody>
                 </table>
-        </div>
+            </div>
         <div class="card-footer right">
             <a href="#" class="btn btn-primary">Отмена</a>
-            <a href="" class="btn btn-success">Заказать</a>
+            <button type="submit" class="btn btn-success">
+                    Заказать
+            </button>
         </div>
+        </form>
+         {% else %}
+            <div class="alert alert-info mt-1">
+                <h5> Вы еще не выбрали товар :D</h5>
+            </div>
+     {% endif %}
     </div>
 {% endblock %}

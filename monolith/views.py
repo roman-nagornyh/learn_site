@@ -1,9 +1,11 @@
+import datetime
+
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
-from django.views.generic import DetailView, TemplateView, DeleteView
+from django.views.generic import TemplateView, DeleteView
 from .models import *
 from django.db.models import Sum, Count
 
@@ -18,13 +20,10 @@ class ProductList(LoginRequiredMixin, ListView):
 class BucketView(LoginRequiredMixin, ListView):
     model = Bucket
     template_name = 'bucket/product_list.html'
-    queryset = Bucket.objects.all()
+    queryset = Bucket.objects.product_sum()
 
     def get_queryset(self):
-        return Bucket.objects.filter(status=False, user_id=self.kwargs.get('user_id')) \
-            .values('product__id', 'product__name') \
-            .annotate(sum_product=Sum('product__price'), count_product=Count('product__id'))\
-
+        return self.queryset.filter(status=False, user_id=self.kwargs.get('user_id'))
 
     def get(self, request, *args, **kwargs):
         result = super(BucketView, self).get(request, *args, **kwargs)
@@ -70,6 +69,41 @@ class DeleteBucketProductAll(DeleteBucketProductFirst):
         return HttpResponseRedirect(self.success_url)
 
 
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
+    queryset = Order.objects.prefetch_related('products_order', 'products_order__product')
+    template_name = 'orders.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        return self.queryset.filter(client_id=self.request.user.client.id)
+
+
+class OrderCreateView(LoginRequiredMixin, TemplateView):
+    def post(self, request, *args, **kwargs):
+        from .models import Order, ProductOrder
+        post = request.POST
+        identity_list = post.getlist('product_id', [])
+        count_list = post.getlist('count_product', [])
+        price_list = post.getlist('price', [])
+        total_price = post.get('total_price', 0)
+        order = Order.objects.create(
+            order_date=datetime.datetime.now(),
+            status_id=1,
+            client_id=request.user.client.id,
+            total_price=total_price
+        )
+        created_list = []
+        for index, pr_id in enumerate(identity_list):
+            created_list.append(
+                ProductOrder(order_id=order.id, product_id=pr_id,
+                             count=count_list[index], price=price_list[index])
+            )
+        ProductOrder.objects.bulk_create(created_list)
+        Bucket.objects.filter(product_id__in=identity_list).delete()
+        return HttpResponseRedirect(reverse('monolith:order_list'))
+
+
 class BookStoreView(TemplateView):
     template_name = 'book_store.html'
 
@@ -80,12 +114,6 @@ class BookStoreView(TemplateView):
         return context
 
 
-# Разбор select_related
-class TestView(TemplateView):
-    template_name = 'test.html'
 
-    def get(self, request, *args, **kwargs):
-      
-        return super(TestView, self).get(request, *args, **kwargs)
 
 

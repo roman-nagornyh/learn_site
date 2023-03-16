@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .managers import BucketManager
 
 # Create your models here.
 
@@ -63,9 +64,9 @@ class Client(models.Model):
 
 class Bucket(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар', null=False)
-    # count = models.IntegerField(null=False, verbose_name='Количество', default=1)
     user = models.ForeignKey(Client, null=False, verbose_name='Пользователь', on_delete=models.CASCADE)
     status = models.BooleanField(verbose_name='Статус корзины', null=False, default=False)
+    objects = BucketManager()
 
     class Meta:
         db_table = f'{DB_SCHEMA}\".\"buckets'
@@ -86,7 +87,8 @@ class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Пользователь', null=False)
     status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, null=False, verbose_name='Статус заказа')
     order_date = models.DateTimeField(null=False, verbose_name='Дата заказа')
-    issue_date = models.DateTimeField(null=False, verbose_name='Дата выдачи')
+    issue_date = models.DateTimeField(null=True, verbose_name='Дата выдачи')
+    total_price = models.IntegerField(null=False, default=0, verbose_name='Стоимость заказа')
 
     class Meta:
         db_table = f'{DB_SCHEMA}\".\"orders'
@@ -95,7 +97,8 @@ class Order(models.Model):
 
 
 class ProductOrder(models.Model):
-    order = models.ForeignKey(Order, verbose_name='Заказ', null=False, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, verbose_name='Заказ', null=False, on_delete=models.CASCADE,
+                              related_name='products_order')
     product = models.ForeignKey(Product, verbose_name='Продукт', null=False, on_delete=models.CASCADE)
     count = models.IntegerField(null=False, default=1, verbose_name='Количество товара')
     price = models.IntegerField(null=False, verbose_name='Цена')
@@ -106,42 +109,32 @@ class ProductOrder(models.Model):
         verbose_name_plural = 'Товары и заказы'
 
 
-#============================== Тестовый пример  ===============================================
+#============================== Пример realted_name  ===============================================
 
 DB_SCHEMA_TEST = 'test'
 
 
-class Person(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+class Category(models.Model):
+    name = models.CharField(null=False, verbose_name='Название', max_length=250)
 
     class Meta:
-        db_table = f'{DB_SCHEMA_TEST}\".\"persons'
+        db_table = f'{DB_SCHEMA_TEST}\".\"categories'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
 
-class MyPerson(Person):
+class ProductTest(models.Model):
+    name = models.CharField(null=False, verbose_name='Название', max_length=250)
+    category = models.ForeignKey(null=False, verbose_name='Категория',
+                                 to=Category, on_delete=models.CASCADE, related_name='products',
+                                 related_query_name='product')
+
     class Meta:
-        proxy = True
+        db_table = f'{DB_SCHEMA_TEST}\".\"products'
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары '
 
 
-
-# class Topping(models.Model):
-#     name = models.CharField(null=False, max_length=50)
-#
-#     class Meta:
-#         db_table = f'{DB_SCHEMA_TEST}\".\"toppings'
-#         verbose_name = 'Начинка пиццы'
-#         verbose_name_plural = 'Начинки пиццы'
-#
-#
-# class Pizza(models.Model):
-#     name = models.CharField(null=False, max_length=100)
-#     toppings = models.ManyToManyField(Topping)
-#
-#     class Meta:
-#         db_table = f'{DB_SCHEMA_TEST}\".\"pizza'
-#         verbose_name = 'Пицца'
-#         verbose_name_plural = 'Пиццы'
 
 
 

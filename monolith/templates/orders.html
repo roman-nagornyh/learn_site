@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container container-fluid mt-5">
+        <h5>Список заказов</h5>
+        {% if orders.count > 0%}
+            <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Продукт/Заказ</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <th colspan="3">
+                           <div class="alert alert-primary">
+                                Заказ от {{order.order_date}}
+                           </div>
+                        </th>
+                    </tr>
+                    {% for pr_order in order.products_order.all %}
+                        <tr>
+                            <td>
+                                {{pr_order.product.name}}
+                            </td>
+                            <td>
+                                {{pr_order.count}}
+                            </td>
+                            <td>
+                                {{pr_order.price}} руб
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="3">
+                            <div class="alert alert-primary">
+                                  Итоговая цена: {{order.total_price}} руб
+                            </div>
+                        </th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+            {% else %}
+            <div class="alert alert-primary" role="alert">
+                <h5>У вас пока нет заказов !</h5>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
