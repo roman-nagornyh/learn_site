@@ -109,34 +109,6 @@ class ProductOrder(models.Model):
         verbose_name_plural = 'Товары и заказы'
 
 
-#============================== Пример realted_name  ===============================================
-
-DB_SCHEMA_TEST = 'test'
-
-
-class Category(models.Model):
-    name = models.CharField(null=False, verbose_name='Название', max_length=250)
-
-    class Meta:
-        db_table = f'{DB_SCHEMA_TEST}\".\"categories'
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
-
-
-class ProductTest(models.Model):
-    name = models.CharField(null=False, verbose_name='Название', max_length=250)
-    category = models.ForeignKey(null=False, verbose_name='Категория',
-                                 to=Category, on_delete=models.CASCADE, related_name='products',
-                                 related_query_name='product')
-
-    class Meta:
-        db_table = f'{DB_SCHEMA_TEST}\".\"products'
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары '
-
-
-
-
 
 
 
