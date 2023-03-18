@@ -19,11 +19,11 @@
                 <ul class="navbar-nav left">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'monolith:product_list' %}">
-                            Список товаров
+                            Товары
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'monolith:bucket_detail' request.user.client.pk %}" class="nav-link">
+                        <a href="{% url 'monolith:bucket_detail'%}" class="nav-link">
                             Корзина
                         </a>
                     </li>

@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container container-fluid">
-        <h5 class="mt-5">Список продуктов</h5>
-    <table class="table">
+    <h5 class="mt-5">Товары</h5>
+    {% if product_list.count > 0 %}
+         <table class="table">
         <thead>
          <tr>
              <th>Продукт</th>
@@ -33,21 +34,25 @@
                       {{product.guarantee}}
                   </td>
                   <td>
-                      <a href="#" class="btn btn-primary">Подробнее</a>
-                      <form action="{% url 'monolith:bucket_add' %}" method="post">
+                      <div class="d-flex">
+                          <a href="#" class="btn btn-outline-info">Подробнее</a>
+                          <form action="{% url 'monolith:bucket_add' %}" method="post" >
                           {% csrf_token %}
                           <input type="hidden" name="product" value="{{product.pk}}">
                           <input type="hidden" name="client" value="{{request.user.client.pk}}">
-                           <button type="submit" class="btn btn-success">
+                           <button type="submit" class="btn btn-outline-success mx-2">
                              В корзину
                            </button>
                       </form>
+                      </div>
+
+
                   </td>
               </tr>
          {% endfor %}
         </tbody>
     </table>
-    <nav class="center-block">
+        <nav class="center-block">
         <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
           <li class="page-item">
@@ -72,5 +77,10 @@
           {%endif %}
         </ul>
     </nav>
+        {% else %}
+            <div class="alert  alert-danger mt-3">
+                К сожалению мы еще не обновили базу товаров !
+            </div>
+    {% endif %}
 </div>
 {% endblock %}

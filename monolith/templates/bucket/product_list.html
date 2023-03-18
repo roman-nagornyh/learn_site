@@ -13,19 +13,19 @@
     </script>
 {% endblock %}
 {% block content %}
-    <div class="card m-5">
-        <h5 class="card-header">
-            Моя корзина
-        </h5>
+    <div class="container container-fluid">
+        <h5 class="mt-3">Товары к покупке</h5>
+
      {% if bucket_list.count > 0 %}
-          <form action="{% url 'monolith:order_create' %}" method="post">
-      {% csrf_token %}
-        <div class="card-body">
-            <table class="table">
+         <form action="{% url 'monolith:order_create' %}" method="post">
+         {% csrf_token %}
+          <div class="card m-5">
+                <div class="card-body">
+                    <table class="table">
                     <thead>
                         <tr>
                             <th>Товар</th>
-                            <th>Количество</th>
+                            <th>Количество (шт)</th>
                             <th>Цена </th>
                             <th>Действия</th>
                         </tr>
@@ -66,17 +66,18 @@
                             </tr>
                     </tbody>
                 </table>
+                </div>
+            <div class="card-footer text-end">
+                <a href="#" class="btn btn-danger">Отмена</a>
+                <button type="submit" class="btn btn-primary">
+                        Заказать
+                </button>
             </div>
-        <div class="card-footer right">
-            <a href="#" class="btn btn-primary">Отмена</a>
-            <button type="submit" class="btn btn-success">
-                    Заказать
-            </button>
-        </div>
+          </div>
         </form>
-         {% else %}
-            <div class="alert alert-info mt-1">
-                <h5> Вы еще не выбрали товар :D</h5>
+        {% else %}
+            <div class="alert alert-info mt-4">
+                <h5>Вы еще не выбрали товар !</h5>
             </div>
      {% endif %}
     </div>

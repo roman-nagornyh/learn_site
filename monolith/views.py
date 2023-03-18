@@ -23,7 +23,7 @@ class BucketView(LoginRequiredMixin, ListView):
     queryset = Bucket.objects.product_sum()
 
     def get_queryset(self):
-        return self.queryset.filter(status=False, user_id=self.kwargs.get('user_id'))
+        return self.queryset.filter(status=False, client_id=self.request.user.client.id)
 
     def get(self, request, *args, **kwargs):
         result = super(BucketView, self).get(request, *args, **kwargs)
@@ -35,9 +35,9 @@ class BucketView(LoginRequiredMixin, ListView):
 class BucketAddView(LoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         post = request.POST
-        Bucket.objects.create(product_id=post.get('product'), user_id=post.get('client'))
-        reverse_obj = reverse('monolith:bucket_detail', kwargs={'user_id': post.get('client')})
-        return HttpResponseRedirect(redirect_to=reverse_obj)
+        Bucket.objects.create(product_id=post.get('product'),
+                              client_id=request.user.client.id)
+        return HttpResponseRedirect(redirect_to=reverse('monolith:bucket_detail'))
 
 
 class UserLogin(LoginView):
@@ -50,8 +50,7 @@ class DeleteBucketProductFirst(LoginRequiredMixin, DeleteView):
     model = Bucket
 
     def get_success_url(self):
-        client_id = self.request.user.client.id
-        return reverse('monolith:bucket_detail', kwargs={'user_id': client_id})
+        return reverse('monolith:bucket_detail')
 
     def get_queryset(self):
         return Bucket.objects.filter(product_id=self.kwargs.get('pk', False))
@@ -102,18 +101,3 @@ class OrderCreateView(LoginRequiredMixin, TemplateView):
         ProductOrder.objects.bulk_create(created_list)
         Bucket.objects.filter(product_id__in=identity_list).delete()
         return HttpResponseRedirect(reverse('monolith:order_list'))
-
-
-class BookStoreView(TemplateView):
-    template_name = 'book_store.html'
-
-    def get_context_data(self, **kwargs):
-        results = []
-        context = super(BookStoreView, self).get_context_data(**kwargs)
-        context['publisher_results'] = results
-        return context
-
-
-
-
-

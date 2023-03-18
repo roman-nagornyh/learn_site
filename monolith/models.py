@@ -64,7 +64,7 @@ class Client(models.Model):
 
 class Bucket(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар', null=False)
-    user = models.ForeignKey(Client, null=False, verbose_name='Пользователь', on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, null=False, verbose_name='Пользователь', on_delete=models.CASCADE)
     status = models.BooleanField(verbose_name='Статус корзины', null=False, default=False)
     objects = BucketManager()
 
