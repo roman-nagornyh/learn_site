@@ -31,6 +31,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 LOGIN_REDIRECT_URL = 'monolith:product_list'
+LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 
 # Application definition
@@ -57,7 +58,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "monolith.middelware.FirstMiddelware",
+    # "monolith.middelware.FirstMiddelware",
     # "monolith.middelware.SecondMiddleware",
 
 ]

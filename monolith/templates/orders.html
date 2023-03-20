@@ -3,46 +3,47 @@
     <div class="container container-fluid mt-5">
         <h5>Список заказов</h5>
         {% if orders.count > 0%}
-            <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Продукт/Заказ</th>
-                    <th>Количество</th>
-                    <th>Цена</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                    <tr>
-                        <th colspan="3">
-                           <div class="alert alert-primary">
+            {% for order in orders %}
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr class="table-primary">
+                            <th colspan="3">
                                 Заказ от {{order.order_date}}
-                           </div>
-                        </th>
-                    </tr>
-                    {% for pr_order in order.products_order.all %}
+                            </th>
+                        </tr>
                         <tr>
+                            <th>Продукт</th>
+                            <th>Количество (шт)</th>
+                            <th>Цена</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       {% for pr_ord in order.products_order.all %}
+                           <tr>
                             <td>
-                                {{pr_order.product.name}}
+                                {{pr_ord.product.name}}
                             </td>
                             <td>
-                                {{pr_order.count}}
+                                {{pr_ord.count}}
                             </td>
                             <td>
-                                {{pr_order.price}} руб
+                                {{pr_ord.price}} (руб)
                             </td>
                         </tr>
-                    {% endfor %}
-                    <tr>
-                        <th colspan="3">
-                            <div class="alert alert-primary">
-                                  Итоговая цена: {{order.total_price}} руб
-                            </div>
-                        </th>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                       {% endfor %}
+                       <tr>
+                           <th colspan="3" class="text-right">
+                               <span>
+                                   Итоговая сумма {{order.total_price}} (руб)
+                              </span>
+                                <button class="btn btn-outline-dark" >
+                                   Оплатить
+                               </button>
+                           </th>
+                       </tr>
+                    </tbody>
+                </table>
+            {% endfor %}
             {% else %}
             <div class="alert alert-primary" role="alert">
                 <h5>У вас пока нет заказов !</h5>

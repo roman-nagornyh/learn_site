@@ -14,7 +14,7 @@ class ProductList(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'product/list.html'
     queryset = Product.objects.all().select_related('product_type')
-    paginate_by = 10
+    paginate_by = 20
 
 
 class BucketView(LoginRequiredMixin, ListView):
@@ -80,7 +80,7 @@ class OrderListView(LoginRequiredMixin, ListView):
 
 class OrderCreateView(LoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
-        from .models import Order, ProductOrder
+        from .models import Order, ProductOrder, OrderStatus
         post = request.POST
         identity_list = post.getlist('product_id', [])
         count_list = post.getlist('count_product', [])
@@ -88,7 +88,7 @@ class OrderCreateView(LoginRequiredMixin, TemplateView):
         total_price = post.get('total_price', 0)
         order = Order.objects.create(
             order_date=datetime.datetime.now(),
-            status_id=1,
+            status=OrderStatus.objects.get(name='Оформлен'),
             client_id=request.user.client.id,
             total_price=total_price
         )

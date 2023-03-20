@@ -21,7 +21,7 @@ from learn_site import settings
 urlpatterns = [
     path("monolith/", include("monolith.urls")),
     path("admin/", admin.site.urls),
-    path('login/', UserLogin.as_view(), name='login'),
+    path('', UserLogin.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
 ]
 if settings.DEBUG:
