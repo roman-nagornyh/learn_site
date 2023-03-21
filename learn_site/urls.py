@@ -18,11 +18,15 @@ from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 from monolith.views import UserLogin
 from learn_site import settings
+from api.urls import router
 urlpatterns = [
     path("monolith/", include("monolith.urls")),
     path("admin/", admin.site.urls),
     path('', UserLogin.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+    path('api/v1/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
 ]
 if settings.DEBUG:
     import debug_toolbar

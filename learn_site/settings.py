@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 import monolith.middelware
 
@@ -46,7 +45,17 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "monolith.apps.MonolithConfig",
     "debug_toolbar",
+    "rest_framework",
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication'
+    ]
+
+}
 
 MIDDLEWARE = [
 
@@ -136,7 +145,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+#SessionAuthentication
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
