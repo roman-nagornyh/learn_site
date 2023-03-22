@@ -8,13 +8,30 @@ from django.views.generic.list import ListView
 from django.views.generic import TemplateView, DeleteView
 from .models import *
 from django.db.models import Sum, Count
+from django_filters.views import FilterView
+from .filters import ProductFilter
 
 
-class ProductList(LoginRequiredMixin, ListView):
+class ProductList(LoginRequiredMixin, FilterView):
     model = Product
     template_name = 'product/list.html'
     queryset = Product.objects.all().select_related('product_type')
+    filterset_class = ProductFilter
     paginate_by = 20
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductList, self).get_context_data()
+        get_data = self.request.GET
+        brand_id = get_data.get('brand_id', False)
+        product_type_id = get_data.get('product_type_id', False)
+        context_extra = {
+            'brands': Brand.objects.all(),
+            'product_types': TypeProduct.objects.all(),
+            'brand_id': int(brand_id) if brand_id else '',
+            'name': get_data.get('name', ''),
+            'product_type_id': int(product_type_id) if product_type_id else ''
+        }
+        return context | context_extra
 
 
 class BucketView(LoginRequiredMixin, ListView):

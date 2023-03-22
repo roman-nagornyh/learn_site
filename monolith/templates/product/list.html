@@ -2,8 +2,79 @@
 {% block content %}
 <div class="container container-fluid">
     <h5 class="mt-5">Товары</h5>
+    <form method="get"  action="">
+        <div class="accordion" id="product_filters">
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="headingOne">
+                     <button class="accordion-button" type="button"
+                             data-bs-toggle="collapse" data-bs-target="#collapse_filters" aria-expanded="true" aria-controls="collapse_filters">
+                        Фильтры
+                     </button>
+                </h3>
+                <div id="collapse_filters" class="accordion-collapse collapse show"   data-bs-parent="#product_filters">
+                    <div class="accordion-body">
+                        <div class="input-group mt-3" style="width: 700px">
+                            <span class="input-group-text">Бренд</span>
+                            <select class="form-select" name="brand_id" style="width: 500px">
+                                {% if brand_id %}
+                                    <option value="">Ничего не выбрано</option>
+                                {% else %}
+                                    <option selected value="">Ничего не выбрано</option>
+                                {% endif %}
+                                {% for b in brands %}
+                                    {% if b.id == brand_id %}
+                                        <option selected value="{{b.pk}}">
+                                           {{b.name}}
+                                        </option>
+                                    {% else %}
+                                         <option  value="{{b.pk}}">
+                                           {{b.name}}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="input-group mt-3" style="width: 700px">
+                            <span class="input-group-text">Название </span>
+                            <input type="text" name="name" value="{{name}}" class="form-control">
+                        </div>
+                        <div class="input-group mt-3" style="width: 700px;">
+                            <span class="input-group-text">Категория</span>
+                            <select class="form-select" name="product_type_id">
+                                {% if product_type_id %}
+                                    <option value="">Ничего не выбрано</option>
+                                    {% else %}
+                                     <option  value="">Ничего не выбрано</option>
+                                {% endif %}
+                                {% for  pr_t in product_types %}
+                                    {% if product_type_id == pr_t.pk %}
+                                         <option selected value="{{pr_t.pk}}">
+                                             {{pr_t.name}}
+                                        </option>
+                                    {% else %}
+                                         <option value="{{pr_t.pk}}">
+                                             {{pr_t.name}}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mt-3">
+                            <a href="{% url 'monolith:product_list' %}" class="btn btn-outline-primary">
+                                Сбросить
+                            </a>
+                            <button class="btn btn-outline-success">
+                                 Применить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+     </form>
     {% if product_list.count > 0 %}
-         <table class="table">
+         <table class="table mt-3 table-bordered">
         <thead>
          <tr>
              <th>Продукт</th>
@@ -35,7 +106,7 @@
                   </td>
                   <td>
                       <div class="d-flex">
-                          <a href="#" class="btn btn-outline-info">Подробнее</a>
+                          <a href="#" class="btn btn-outline-primary">Подробнее</a>
                           <form action="{% url 'monolith:bucket_add' %}" method="post" >
                           {% csrf_token %}
                           <input type="hidden" name="product" value="{{product.pk}}">
@@ -78,8 +149,8 @@
         </ul>
     </nav>
         {% else %}
-            <div class="alert  alert-danger mt-3">
-                К сожалению мы еще не обновили базу товаров !
+            <div class="alert  alert-primary mt-3">
+                Ничего не найдено!
             </div>
     {% endif %}
 </div>
