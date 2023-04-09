@@ -118,3 +118,7 @@ class OrderCreateView(LoginRequiredMixin, TemplateView):
         ProductOrder.objects.bulk_create(created_list)
         Bucket.objects.filter(product_id__in=identity_list).delete()
         return HttpResponseRedirect(reverse('monolith:order_list'))
+
+
+
+

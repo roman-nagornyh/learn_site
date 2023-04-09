@@ -1,4 +1,4 @@
-"""learn_site URL Configuration
+"""electronic_store URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 from monolith.views import UserLogin
-from learn_site import settings
+from base import settings
 from api.urls import router
 urlpatterns = [
     path("monolith/", include("monolith.urls")),
@@ -26,6 +26,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('api/v1/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('', include('social_django.urls')),
 
 ]
 if settings.DEBUG:
