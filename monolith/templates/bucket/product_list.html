@@ -3,7 +3,6 @@
     <script>
         function delete_object(url)
         {
-            // Можно и через cookie попробовать достать, тк токен хранится там
             let token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             fetch(url, {
                 method:'POST',
@@ -49,10 +48,10 @@
                                 </td>
                                 <td>
                                     <span onclick="delete_object('{% url 'monolith:delete_product_all' bucket.product__id%}')"
-                                    class="btn btn-danger">
+                                    class="btn btn-outline-danger">
                                         Убрать из корзины
                                     </span>
-                                    <span  class="btn btn-warning"
+                                    <span  class="btn btn-outline-dark"
                                            onclick="delete_object('{% url 'monolith:delete_product_first' bucket.product__id %}')">
                                              Уменьшить кол-во
                                     </span>
@@ -72,7 +71,7 @@
             <div class="card-footer text-end">
                 <a href="#" class="btn btn-outline-danger">Отмена</a>
                 <button type="submit" class="btn btn-outline-dark">
-                        Заказать
+                        Перейти к оформлению
                 </button>
             </div>
           </div>

@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from .managers import BucketManager
 
+TYPES_OBTAINING = [
+    ('С', 'Самовызов',),
+    ('Д', 'Доставка')
+]
+PAYMENT_METHODS = [
+    ('П', 'При получении'),
+    ('О', 'Онлайн'),
+]
 # Create your models here.
 
 DB_SCHEMA = 'store'
@@ -89,6 +97,7 @@ class Order(models.Model):
     order_date = models.DateTimeField(null=False, verbose_name='Дата заказа')
     issue_date = models.DateTimeField(null=True, verbose_name='Дата выдачи')
     total_price = models.IntegerField(null=False, default=0, verbose_name='Стоимость заказа')
+    type_obtaining = models.TextField(choices=TYPES_OBTAINING, verbose_name='Способ получения заказа')
 
     class Meta:
         db_table = f'{DB_SCHEMA}\".\"orders'

@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
-from django.views.generic import TemplateView, DeleteView
+from django.views.generic import TemplateView, DeleteView, CreateView
 from .models import *
 from django.db.models import Sum, Count
 from django_filters.views import FilterView
@@ -88,11 +88,17 @@ class DeleteBucketProductAll(DeleteBucketProductFirst):
 class OrderListView(LoginRequiredMixin, ListView):
     model = Order
     queryset = Order.objects.prefetch_related('products_order', 'products_order__product')
-    template_name = 'orders.html'
+    template_name = 'orders/list.html'
     context_object_name = 'orders'
 
     def get_queryset(self):
         return self.queryset.filter(client_id=self.request.user.client.id)
+
+
+class OrderCreateViewNew(LoginRequiredMixin, CreateView):
+    model = Order
+    template_name = 'orders/create.html'
+    fields = '__all__'
 
 
 class OrderCreateView(LoginRequiredMixin, TemplateView):

@@ -5,7 +5,7 @@ from .views import (
     BucketView,
     DeleteBucketProductFirst,
     DeleteBucketProductAll,
-    OrderCreateView,
+    OrderCreateViewNew,
     OrderListView
 )
 app_name = 'monolith'
@@ -19,8 +19,9 @@ urlpatterns = [
         path('delete_product/<int:pk>', DeleteBucketProductFirst.as_view(), name='delete_product_first'),
         path('delete_product_all/<int:pk>', DeleteBucketProductAll.as_view(), name='delete_product_all'),
     ])),
+
     path('order/', include([
-        path('create/', OrderCreateView.as_view(), name='order_create'),
+        path('create/', OrderCreateViewNew.as_view(), name='order_create'),
         path('list/', OrderListView.as_view(), name='order_list'),
     ]))
 ]

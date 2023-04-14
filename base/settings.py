@@ -72,16 +72,11 @@ MIDDLEWARE = [
 
 ]
 
-INTERNAL_IPS = ['127.0.0.1', 'electronic_store.test']
-
-
-ALLOWED_HOSTS = ['127.0.0.1', 'electronic_store.test']
-
+INTERNAL_IPS = ['127.0.0.1']
 
 # tricks to have debug toolbar when developing with docker
 ip = socket.gethostbyname(socket.gethostname())
 INTERNAL_IPS += [ip[:-1] + '1']
-
 
 
 ROOT_URLCONF = "base.urls"
