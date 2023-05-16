@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets, pagination
-from monolith.models import Product
+from application.models import Product
 from .serializers import ProductSerializer
 from rest_framework import authentication
 

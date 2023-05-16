@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-import monolith.middelware
+import application.middelware
 import socket
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -28,9 +30,9 @@ SECRET_KEY = "django-insecure-@km4dah&q$6zc5ih8swk0^kczb()cn&tb#g)cba@43h-j$ds=%
 DEBUG = True
 
 
-LOGIN_REDIRECT_URL = 'monolith:product_list'
-LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = "application:product_list"
+LOGIN_URL = "login"
+LOGOUT_REDIRECT_URL = "login"
 
 # Application definition
 
@@ -42,23 +44,21 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "api.apps.ApiConfig",
-    "monolith.apps.MonolithConfig",
+    "application.apps.ApplicationConfig",
     "debug_toolbar",
     "rest_framework",
     "social_django",
 ]
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication'
-    ]
-
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication"
+    ],
 }
 
 MIDDLEWARE = [
-
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -67,21 +67,19 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "monolith.middelware.FirstMiddelware",
-    "monolith.middelware.SecondMiddleware",
-
+    "application.middelware.FirstMiddelware",
+    "application.middelware.SecondMiddleware",
 ]
 
-INTERNAL_IPS = ['127.0.0.1', 'electronic_store.test']
+INTERNAL_IPS = ["127.0.0.1", "electronic_store.test"]
 
 
-ALLOWED_HOSTS = ['127.0.0.1', 'electronic_store.test']
+ALLOWED_HOSTS = ["127.0.0.1", "electronic_store.test"]
 
 
 # tricks to have debug toolbar when developing with docker
 ip = socket.gethostbyname(socket.gethostname())
-INTERNAL_IPS += [ip[:-1] + '1']
-
+INTERNAL_IPS += [ip[:-1] + "1"]
 
 
 ROOT_URLCONF = "base.urls"
@@ -121,13 +119,15 @@ DATABASES = {
 }
 
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
-SOCIAL_AUTH_VK_OAUTH2_KEY = ''
-SOCIAL_AUTH_VK_OAUTH2_SECRET = ''
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', ]
+SOCIAL_AUTH_VK_OAUTH2_KEY = ""
+SOCIAL_AUTH_VK_OAUTH2_SECRET = ""
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = [
+    "email",
+]
 
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.vk.VKOAuth2',
-    'django.contrib.auth.backends.ModelBackend'
+    "social_core.backends.vk.VKOAuth2",
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 # Password validation
@@ -160,11 +160,13 @@ USE_I18N = True
 
 USE_TZ = True
 
-#SessionAuthentication
+AUTH_USER_MODEL = "application.User"
+
+# SessionAuthentication
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -173,15 +175,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 import os
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
     },
 }

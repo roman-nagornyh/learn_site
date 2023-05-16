@@ -7,6 +7,7 @@ def simple_middleware(get_response):
         response = get_response(request)
         # Код выполняющийся после рендеринга view
         return response
+
     return middleware
 
 
@@ -15,13 +16,13 @@ class FirstMiddelware:
         self.get_response = get_response
 
     def __call__(self, request):
-        print('Я создал первый мидедвайр данный код работает до отображения view')
+        print("Я создал первый мидедвайр данный код работает до отображения view")
         response = self.get_response(request)
-        print('Данный код работает после отображения view')
+        print("Данный код работает после отображения view")
         return response
 
     def process_exception(self, request, exception):
-        print(f'Возникшее исключение {exception}')
+        print(f"Возникшее исключение {exception}")
 
 
 class SecondMiddleware:
@@ -29,8 +30,7 @@ class SecondMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        print('Работает второй миддевайр для рендеринга страницы')
+        print("Работает второй миддевайр для рендеринга страницы")
         response = self.get_response(request)
-        print('Все еще работает второй мидделвайр для рендеринга страницы')
+        print("Все еще работает второй мидделвайр для рендеринга страницы")
         return response
-

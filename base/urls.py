@@ -16,21 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LogoutView
-from monolith.views import UserLogin
+from application.views import UserLogin
 from base import settings
 from api.urls import router
-urlpatterns = [
-    path("monolith/", include("monolith.urls")),
-    path("admin/", admin.site.urls),
-    path('', UserLogin.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
-    path('api/v1/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('', include('social_django.urls')),
 
+urlpatterns = [
+    path("application/", include("application.urls")),
+    path("admin/", admin.site.urls),
+    path("", UserLogin.as_view(), name="login"),
+    path("logout/", LogoutView.as_view(next_page="login"), name="logout"),
+    path("api/v1/", include(router.urls)),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("", include("social_django.urls")),
 ]
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns.append(path('__debug__/', include(debug_toolbar.urls)))
 
-
+    urlpatterns.append(path("__debug__/", include(debug_toolbar.urls)))

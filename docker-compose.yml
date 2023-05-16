@@ -13,6 +13,14 @@ services:
     volumes:
       - .:/app
 
+#  migrations:
+#      build: .
+#      command: python manage.py migrate
+#      volumes:
+#        - .:/app
+#      depends_on:
+#        - postgres_db
+
   postgres_db:
     image: postgres
     container_name: postgres_db

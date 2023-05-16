@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from monolith.models import Product
+from application.models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):

@@ -8,7 +8,7 @@ from .views import (
     OrderCreateView,
     OrderListView
 )
-app_name = 'monolith'
+app_name = 'application'
 urlpatterns = [
     path('product/', include([
         path('list/', ProductList.as_view(), name='product_list'),

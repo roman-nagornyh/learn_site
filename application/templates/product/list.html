@@ -60,7 +60,7 @@
                             </select>
                         </div>
                         <div class="mt-3">
-                            <a href="{% url 'monolith:product_list' %}" class="btn btn-outline-primary">
+                            <a href="{% url 'application:product_list' %}" class="btn btn-outline-primary">
                                 Сбросить
                             </a>
                             <button class="btn btn-outline-success">
@@ -107,7 +107,7 @@
                   <td>
                       <div class="d-flex">
                           <a href="#" class="btn btn-outline-primary">Подробнее</a>
-                          <form action="{% url 'monolith:bucket_add' %}" method="post" >
+                          <form action="{% url 'application:bucket_add' %}" method="post" >
                           {% csrf_token %}
                           <input type="hidden" name="product" value="{{product.pk}}">
                           <input type="hidden" name="client" value="{{request.user.client.pk}}">

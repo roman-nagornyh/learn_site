@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
 
-class MonolithConfig(AppConfig):
+class ApplicationConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "monolith"
+    name = "application"
+    app_label = "application"
